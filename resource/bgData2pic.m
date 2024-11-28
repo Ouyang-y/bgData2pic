@@ -1,27 +1,48 @@
-function [] = bgData2pic(pathbgData,pathOutput,map,output_ext)
+function [] = bgData2pic(pathbgData,pathOutput,map,output_ext,varargin)
 % bgData2pic  Read data from .bgData file and save to .ext picture file.
 %   bgData2pic(pathbgData,pathOutput,map,output_ext)
+%   bgData2pic(pathbgData,pathOutput,map,output_ext,"Llimit",Llimit,"maxpower",maxpower)
 %   example:
-%       bgData2pic(pathbgData,pathOutput,map,{'bmp','tiff','png','jpeg'})
+%       bgData2pic(pathbgData,pathOutput,map,{'bmp','tiff','png','jpeg'},"Llimit",Llimit)
 %
 %   output_type = {'bmp','tiff','png','jpeg'},'jpg' 'tif' alternative
 %
 % Syntax: (这里添加函数的调用格式, `[]`的内容表示可选参数)
-%	[] = bgDataRead(pathbgData, pathOutput, map ...
-%							[, output_ext, "tiff"]);
+%	[] = bgData2pic(pathbgData, pathOutput, map, output_ext ...
+%							[, 'Llimit', 0 ...
+%							 , 'maxpower', 4000]);
 %
 % Params:
 %   - pathbgData    [required]  [char] 处理.bgData路径
 %   - pathOutput    [required]  [char] 输出图片路径
 %   - map    [required]  [numeric; size=130,3] 输出图片颜色图，要求130×3\n对应3对应\t\t[R,\tG,\tB]\n130对应\t\t[<0;\t128位;\t过曝]
 %   - output_ext    [required]  [] 输出图片种类，可多选，多选请用cellstr，例：\nbgData2pic('bmp')\nbgData2pic('tiff')\nbgData2pic('png')\nbgData2pic('jpeg')\nbgData2pic({'bmp','tiff'})
+%   - Llimit    [namevalue]  [numeric; >=0; <1] BeamGage 颜色→z轴刻度下限
+%   - maxpower  [namevalue]  [numeric] BeamGage 颜色→z轴刻度峰值
 %
-% Matlab Version: R2023b
+% Matlab Version: R2024b
 %
 % Author: oyy
 %
-[I,~] = bgDataRead(pathbgData);
-Iout_ind = uint8(ceil(I*128));
+maxpower=4000;Llimit=nan;
+if nargin<4||nargin>8||bitget(size(varargin,2),1)
+        error(sprintf(['bgData2picError: parameter num error\n' ...
+            'bgData2pic(pathbgData,pathOutput,map,output_ext)\n' ...
+            'bgData2pic(pathbgData,pathOutput,map,output_ext,"Llimit",Llimit,"maxpower",maxpower,"GroupName",GroupName)\n']))
+end
+if nargin>4
+    for temp = 1:2:size(varargin,2)
+        switch varargin{temp}
+            case 'maxpower'
+                maxpower=varargin{temp+1};
+            case 'Llimit'
+                Llimit=varargin{temp+1};
+            otherwise,error('bgDataReadError: unrecognized parameter');
+        end
+    end
+end
+[I,~] = bgDataRead(pathbgData,"Llimit",Llimit,"maxpower",maxpower);
+Iout_ind = uint8(ceil(I*130));
 
 if any(strcmp(output_ext,'bmp'))
     imwrite(Iout_ind,map,[pathOutput,'.bmp'],"bmp");
