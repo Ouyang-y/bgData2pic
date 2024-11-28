@@ -1,0 +1,87 @@
+{
+	"_schemaVersion" : "1.0.0",
+	"bgData2pic" : 
+	{
+		"inputs" : 
+		[
+			{
+				"kind" : "required",
+				"name" : "pathbgData",
+				"purpose" : "处理.bgData路径",
+				"type" : 
+				[
+					"char"
+				]
+			},
+			{
+				"kind" : "required",
+				"name" : "pathOutput",
+				"purpose" : "输出图片路径",
+				"type" : 
+				[
+					"char"
+				]
+			},
+			{
+				"kind" : "required",
+				"name" : "map",
+				"purpose" : "输出图片颜色图，要求130×3\n对应3对应\t\t[R,\tG,\tB]\n130对应\t\t[<0;\t128位;\t过曝]",
+				"type" : 
+				[
+					"numeric",
+					"size=130,3"
+				]
+			},
+			{
+				"kind" : "required",
+				"name" : "output_ext",
+				"purpose" : "输出图片种类，可多选，多选请用cellstr，例：\nbgData2pic('bmp')\nbgData2pic('tiff')\nbgData2pic('png')\nbgData2pic('jpeg')\nbgData2pic({'bmp','tiff'})",
+				"type" : []
+			}
+		]
+	},
+	"bgDataRead" : 
+	{
+		"inputs" : 
+		[
+			{
+				"kind" : "required",
+				"name" : "filename",
+				"purpose" : ".bgData文件路径",
+				"type" : 
+				[
+					"char"
+				]
+			},
+			{
+				"kind" : "namevalue",
+				"name" : "Llimit",
+				"purpose" : "BeamGage 颜色→z轴刻度下限",
+				"type" : 
+				[
+					"numeric",
+					">=0",
+					"<1"
+				]
+			},
+			{
+				"kind" : "namevalue",
+				"name" : "maxpower",
+				"purpose" : "BeamGage 颜色→z轴刻度峰值",
+				"type" : 
+				[
+					"numeric"
+				]
+			},
+			{
+				"kind" : "namevalue",
+				"name" : "GroupName",
+				"purpose" : "BeamGage 读取帧序号",
+				"type" : 
+				[
+					"numeric"
+				]
+			}
+		]
+	}
+}

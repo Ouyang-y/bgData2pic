@@ -1,0 +1,2 @@
+背景动.bgData filter=lfs diff=lfs merge=lfs -text
+*.bgData filter=lfs diff=lfs merge=lfs -text
